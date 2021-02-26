@@ -1,19 +1,16 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>CRM</title>
-    <style>
-        .lead {
-            padding: 10px 6px;
-            margin-top: 10px;
-            background-color: #f6f6f6;
-            width: 100%;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static "css/style.min.css" %}">
 </head>
 <body>
-{% block content %}
-{% endblock content %}
+<div class="max-w-7xl mx-auto">
+    {% include "navbar.html" %}
+    {% block content %}
+    {% endblock content %}
+</div>
 </body>
 </html>

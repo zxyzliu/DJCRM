@@ -55,6 +55,10 @@ def lead_delete(request, pk):
     lead.delete()
     return redirect("/leads")
 
+
+def landing_page(request):
+    return render(request, "landing.html")
+
 # def lead_create(request):
 #     form = LeadForm()
 #     if request.method == "POST":

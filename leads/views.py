@@ -1,10 +1,18 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse
+from django.views import generic
 from .models import Lead, Agent
 from .forms import LeadForm, LeadModelForm
+from django.core.mail import send_mail
 
 
 # Create your views here.
+class LeadListView(generic.ListView):
+    template_name = "leads/lead_list.html"
+    queryset = Lead.objects.all()
+    context_object_name = "leads"
+
+
 def lead_list(request):
     # return HttpResponse("Hi there!")
     leads = Lead.objects.all()
@@ -14,12 +22,34 @@ def lead_list(request):
     return render(request, "leads/lead_list.html", context)
 
 
+class LeadDetailView(generic.DetailView):
+    template_name = "leads/lead_detail.html"
+    queryset = Lead.objects.all()
+    context_object_name = "lead"
+
+
 def lead_detail(request, pk):
     lead = Lead.objects.get(id=pk)
     context = {
         "lead": lead
     }
     return render(request, "leads/lead_detail.html", context)
+
+
+class LeadCreateView(generic.CreateView):
+    template_name = "leads/lead_create.html"
+    form_class = LeadModelForm
+
+    def get_success_url(self):
+        return reverse("leads:allList")
+
+    def form_valid(self, form):
+        send_mail(subject="A New Lead Just Created",
+                  message="Hi, check out, a new lead just created",
+                  from_email="test@test.com",
+                  recipient_list=["test2@test.com"]
+                  )
+        return super(LeadCreateView, self).form_valid(form)
 
 
 def lead_create(request):
@@ -33,6 +63,15 @@ def lead_create(request):
         "form": form
     }
     return render(request, "leads/lead_create.html", context)
+
+
+class LeadUpdateView(generic.UpdateView):
+    template_name = "leads/lead_update.html"
+    form_class = LeadModelForm
+    queryset = Lead.objects.all()
+
+    def get_success_url(self):
+        return reverse("leads:allList")
 
 
 def lead_update(request, pk):

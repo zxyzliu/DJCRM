@@ -119,5 +119,6 @@ STATICFILES_DIRS = (
 )
 
 AUTH_USER_MODEL = 'leads.User'
+LOGIN_REDIRECT_URL = '/leads'
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
